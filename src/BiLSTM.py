@@ -6,7 +6,9 @@ import pandas as pd
 from time import time
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, accuracy_score
 
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation
@@ -17,7 +19,6 @@ from tensorflow.keras.optimizers import Adam
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore")  # Hide messy Numpy warnings
 
 class BiLSTM_model:
@@ -34,7 +35,7 @@ class BiLSTM_model:
         #model.add(Dropout(0.5))
         model.add(Dense(1, activation='sigmoid'))
         
-        model.compile(loss='binary_crossentropy', optimizer='adam', 
+        model.compile(loss='binary_crossentropy', optimizer=optimizer, 
             metrics=['accuracy', tf.keras.metrics.Precision(name='precision'),
             tf.keras.metrics.Recall(name='recall')])
         print('>> Compiled...')
@@ -61,3 +62,32 @@ class BiLSTM_model:
     def evaluate(self, X_test, y_test):
         scores = self.model.evaluate(X_test, y_test)
         print('Test set\n  Loss: {:0.4f}\n  Accuracy: {:0.4f}\n  Precision: {:0.4}\n  Recall: {:0.4f}'.format(scores[0],scores[1], scores[2], scores[3]))
+
+    def plot_cm(self, X_test, y_test):
+        y_pred = self.model.predict_classes(X_test)
+
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        print('Accuracy: {:0.4f}\n  Precision: {:0.4}\n  Recall: {:0.4f}'.format(accuracy, precision, recall))
+
+        cm = confusion_matrix(y_test, y_pred)
+
+        # plot confusion matrix
+        plt.style.use('default')
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['funny','not funny'])
+        disp.plot(cmap='Spectral_r', values_format='')
+        plt.title('Confusion Matrix of Funny vs Not Funny')
+        plt.tight_layout()
+        #plt.savefig('confusion_matrix.png')
+        plt.show()
+
+    def plot_recall(self):
+        plt.title('Recall')
+        plt.plot(self.history.history['recall'], label='train')
+        plt.plot(self.history.history['val_recall'], label='test')
+        plt.ylabel('recall')
+        plt.xlabel('epoch')
+        plt.legend()
+       #plt.savefig('model_recall.png')
+        plt.show()

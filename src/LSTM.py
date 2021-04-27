@@ -8,6 +8,7 @@ from time import time
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, accuracy_score
 
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation
@@ -18,21 +19,12 @@ from tensorflow.keras.optimizers import Adam
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
-import re
-
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore")  # Hide messy Numpy warnings
 
 class LSTM_model:
     def __init__(self):
         self.model = None
-        self.history = None
-
-    def preprocess(self, text):
-        REPLACE_BY_SPACE_RE = re.compile('[/{}\[\]\|@]')
-        text = REPLACE_BY_SPACE_RE.sub(' ', text) # replace REPLACE_BY_SPACE_RE symbols by space in text
-        text = text.replace('\n', '')
-        return text
+        self.history = []
 
     def tokenize(self, MAX_NB_WORDS, MAX_SEQUENCE_LENGTH, df):
         tokenizer = Tokenizer(num_words=MAX_NB_WORDS, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~')
@@ -79,7 +71,7 @@ class LSTM_model:
         model.add(LSTM(LSTM_OUT, dropout=0.2, recurrent_dropout=0.2)) 
         model.add(Dense(1, activation='sigmoid'))
         
-        model.compile(loss='binary_crossentropy', optimizer='adam', 
+        model.compile(loss='binary_crossentropy', optimizer=optimizer, 
             metrics=['accuracy', tf.keras.metrics.Precision(name='precision'),
             tf.keras.metrics.Recall(name='recall')])
         print('>> Compiled')
@@ -126,6 +118,7 @@ class LSTM_model:
         scores = self.model.evaluate(X_test, y_test)
         print('Test set\n  Loss: {:0.4f}\n  Accuracy: {:0.4f}\n  Precision: {:0.4}\n  Recall: {:0.4f}'.format(scores[0],scores[1], scores[2], scores[3]))
 
+    def plot_cm(self, X_test, y_test):
         y_pred = self.model.predict_classes(X_test)
 
         accuracy = accuracy_score(y_test, y_pred)
@@ -144,7 +137,6 @@ class LSTM_model:
         #plt.savefig('confusion_matrix.png')
         plt.show()
 
-
     def plot_recall(self):
         plt.title('Recall')
         plt.plot(self.history.history['recall'], label='train')
@@ -154,7 +146,3 @@ class LSTM_model:
         plt.legend()
        #plt.savefig('model_recall.png')
         plt.show()
-
-        
-
-#if __name__ == '__main__':

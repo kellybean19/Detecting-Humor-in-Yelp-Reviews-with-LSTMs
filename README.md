@@ -1,4 +1,4 @@
-# Predicting-Humor-in-Yelp-Reviews
+# Detecting Humor with LSTMs
 
 <img src="imgs/funnyreview.png" width="625"/>
 
