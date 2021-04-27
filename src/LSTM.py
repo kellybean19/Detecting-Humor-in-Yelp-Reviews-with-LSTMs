@@ -6,7 +6,8 @@ import pandas as pd
 from time import time
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 import tensorflow as tf
 from tensorflow import keras
@@ -124,7 +125,7 @@ class LSTM_model:
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred)
         recall = recall_score(y_test, y_pred)
-        print('Accuracy: {:0.4f}\n  Precision: {:0.4}\n  Recall: {:0.4f}'.format(accuracy, precision, recall))
+        print('Accuracy: {:0.4f}\nPrecision: {:0.4}\nRecall: {:0.4f}'.format(accuracy, precision, recall))
 
         cm = confusion_matrix(y_test, y_pred)
 

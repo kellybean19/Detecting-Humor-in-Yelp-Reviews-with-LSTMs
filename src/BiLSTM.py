@@ -6,7 +6,8 @@ import pandas as pd
 from time import time
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 import tensorflow as tf
 from tensorflow import keras
@@ -24,7 +25,7 @@ warnings.filterwarnings("ignore")  # Hide messy Numpy warnings
 class BiLSTM_model:
     def __init__(self):
         self.model = None
-        self.history = None
+        self.history = []
 
     def build_model(self, X, MAX_NB_WORDS, EMBEDDING_DIM, LSTM_OUT, optimizer):
         print('>> Building model...')
@@ -69,7 +70,7 @@ class BiLSTM_model:
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred)
         recall = recall_score(y_test, y_pred)
-        print('Accuracy: {:0.4f}\n  Precision: {:0.4}\n  Recall: {:0.4f}'.format(accuracy, precision, recall))
+        print('Accuracy: {:0.4f}\nPrecision: {:0.4}\nRecall: {:0.4f}'.format(accuracy, precision, recall))
 
         cm = confusion_matrix(y_test, y_pred)
 
