@@ -28,7 +28,6 @@ The data was downloaded from the Yelp website. A preview of the data after remov
 I started with logistic regression to get a baseline classification. My text processing pipeline involved:
 
 - Text cleaning
-- Normalization and encoding
 - Tokenization
 - Vectorization
 
@@ -68,16 +67,13 @@ The Precision and Recall for all models were:
 - Bidirectional LSTM: Precision = 0.1015, Recall = 0.7720
 
 
-<img src="imgs/PR_barchart.png" width="425"/>
+<img src="imgs/PR_barchart.png" width="625"/>
 
 Although the precision numbers may seem low, they are all ~2.5x the baseline of pure chance (4%) on an extremely unbalanced dataset. 
 
 The model with the highest recall was the Bidirectional LSTM, which was trained over 4 epochs and produced a loss (binary crossentropy) of 0.5525.
 
-<img src="imgs/model3_architecture.png" width="425"/>
-
-
-
+<img src="imgs/model3_architecture.png" width="525"/>
 
 <img src="imgs/BiLSTM_loss.png" width="425"/>
 
