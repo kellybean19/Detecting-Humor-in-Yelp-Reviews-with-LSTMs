@@ -87,4 +87,4 @@ Further evaluating the model produced the following confusion matrix:
 
 The model that performed the best was the Bidirectional LSTM, which can be explained by the fact that humor is heavily context-dependent. For a given word, signals of humor can be given by surrounding words in both directions, not just forward. 
 
-With 10% precision and 77% recall, the model is correctly labeling about 10% of the reviews the model is detecting as funny. Of those 10%, 77% of reviews are actually funny. A high recall ensures we are not missing any funny reviews, which is important when using humor to increase engagement.
+With 10% precision and 77% recall, the model is correctly labeling about 10% of the reviews the model is detecting as funny. Of those 10%, 77% of reviews are being returned. A high recall ensures we are not missing any funny reviews, which is important when using humor to increase engagement.
